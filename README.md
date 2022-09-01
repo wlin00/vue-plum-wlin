@@ -1,2 +1,2 @@
 # vue-starport-wlin
-> 基于Vue，实现跨路由平滑过渡动画的小demo~ （WIP）
+> 基于Vue3和Canvas，实现的梅花生长动画~ 
