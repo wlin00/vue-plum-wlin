@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <canvas ref="el" width="800" height="800" class="canvas"></canvas>
+    <canvas ref="canvasEl" width="800" height="800" class="canvas"></canvas>
     <div class="action">
       <span>
         <svg class="icon" :class="{'disabled': growthRate <= 1}" @click="decreaseRate">
@@ -15,9 +15,13 @@
       </span>
     </div>
     <div class="action">
-      <Button class="button" @click="reset">重置画布</Button>
+      <Button class="button" @click="reset">Reset</Button>
+      <Button class="button" @click="toGithub">
+        <svg class="icon" style="margin:0;">
+          <use :xlink:href="`#i-github`"></use>
+        </svg>
+      </Button>
     </div>
-  
   </div>
 </template>
 
@@ -31,8 +35,8 @@
   // 长度变量 todo 数据可供用户调整，并做持久化
   const WIDTH = 800, HEIGHT = 800, LENGTH = 50
   // 获取mounted中需要使用的画布ctx上下文
-  const el = ref<HTMLCanvasElement>()
-  const computeCtx = computed(() => el.value?.getContext('2d')!)
+  const canvasEl = ref<HTMLCanvasElement>()
+  const computeCtx = computed(() => canvasEl.value?.getContext('2d')!)
   let pendingTask: Function[] = [] // 当前frame回调数组
   const growthRate = ref<any>(useStorage('growthRate', 7))
   const growthToFrameNumber = computed<number>(() => Math.abs(13 - growthRate.value)) // 当前生长速率转帧数
@@ -140,7 +144,7 @@
     frameCount = 0
     pendingTask = []
     await nextTick()
-    el.value.width = WIDTH // 重置画布的宽/高 会重新生成画布
+    canvasEl.value!.width = WIDTH // 重置画布的宽/高 会重新生成画布
   }
 
   // 减少枯木生长速度
@@ -159,6 +163,11 @@
     growthRate.value += 1
   }
 
+  // 打开github
+  const toGithub = () => {
+    window.open('https://github.com/wlin00/vue-plum-wlin')
+  }
+
   onMounted(() => {
     init()
   })
@@ -168,7 +177,7 @@
 <style lang="scss" scoped>
   .wrap {
     box-sizing: border-box;
-    padding-top: 150px;
+    padding-top: 50px;
   }
   .action {
     margin: 20px;
@@ -202,15 +211,17 @@
   }
   .button {
     margin-left: 20px;
-    background: #5e9889;
+    background: #fff;
+    min-width: 85px;
     box-sizing: border-box;
-    border: 1px solid #5e9889;
+    border: 1px solid #333;
     display: inline-flex;
     height: 42px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0 16px;
-    color: #fff;
+    color: #333;
     font-weight: bold;
     font-size: 18px;
     border-radius: 10px;
